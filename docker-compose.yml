@@ -1,0 +1,35 @@
+# docker-compose.yml
+version: '3'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+  frontend:
+    build: ./frontend
+    ports:
+      - '8080:80'
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+  mongo:
+    image: mongo:4.4
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
